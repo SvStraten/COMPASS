@@ -10,7 +10,7 @@
 * **Regularization ($\lambda$):** {0.5, 1.0, 1.5} 
 * **History Queue ($N$):** {50, 100, 200} 
 * **Correlation Threshold ($\epsilon$):** {0.3, 0.5, 0.7} 
-* **Weibull Shape ($W_k$):** {0.6, 0.8, 1.0} [cite: 327]
-* **Weibull Scale ($W_\lambda$):** {0.25, 0.50, 0.75} [cite: 328]
+* **Weibull Shape ($W_k$):** {0.6, 0.8, 1.0}
+* **Weibull Scale ($W_\lambda$):** {0.25, 0.50, 0.75} 
 
 ![Optimal Hyperparameters](hyperparameters.png)
