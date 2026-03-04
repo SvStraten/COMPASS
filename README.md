@@ -1,4 +1,4 @@
-### Hyperparameters
+## Hyperparameters
 
 ### Hyperparameter Search Space
 * **Window Size ($\mathcal{W}$):** {100, 500, 1000, 1500} 
@@ -15,4 +15,6 @@
 
 ![Optimal Hyperparameters](hyperparameters.png)
 
+
+## Macro F1-Scores 
 ![Macro F1-Score](macro_f1.png)
