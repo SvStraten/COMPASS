@@ -14,3 +14,5 @@
 * **Weibull Scale ($W_\lambda$):** {0.25, 0.50, 0.75} 
 
 ![Optimal Hyperparameters](hyperparameters.png)
+
+![Macro F1-Score](macro_f1.png)
