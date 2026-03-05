@@ -1,4 +1,4 @@
-# CONAP-FM: Foundation Process Prediction Models for Sustainable Online Continual Learning 🚀
+# CONAP-FM: Continual Online Next Activity Prediction with Foundation Models 🚀
 
 ## Hyperparameters
 
