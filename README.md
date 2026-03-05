@@ -23,6 +23,12 @@ python -m venv venv
 source venv/bin/activate 
 pip install -r requirements.txt
 ```
+
+## 📊 Data Preparation
+Place your raw event logs (in `.csv` format) inside the `Data/` directory. The framework automatically handles preprocessing, time-formatting, and sequence extraction via `Utils/preprocess.py`.
+
+*Note: Preprocessed objects are automatically cached as `.pkl` files in the `Preprocessed/` directory to dramatically speed up subsequent runs.*
+
 ## Hyperparameters
 
 ### Hyperparameter Search Space
