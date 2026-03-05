@@ -1,6 +1,6 @@
 # CONAP-FM: Continual Online Next Activity Prediction with Foundation Models
 
-**CONAP-FM** is a novel framework that establishes Foundation Process Prediction Models (FPPMs) for sustainable online continual learning (OCL) in Predictive Process Monitoring (PPM). Our approach successfully addresses the computational bottlenecks of continuous Foundation Model retraining by combining **parameter-efficient fine-tuning (LoRA)**, **unsupervised loss plateau detection**, and **causal-aware gradient adaptation (CAGA)**. This allows the model to autonomously manage concept drift, prevent catastrophic forgetting, and enable backward knowledge transfer without relying on explicit task boundaries. yes
+**CONAP-FM** is a novel framework that establishes Foundation Process Prediction Models (FPPMs) for sustainable online continual learning (OCL) in Predictive Process Monitoring (PPM). Our approach successfully addresses the computational bottlenecks of continuous Foundation Model retraining by combining **parameter-efficient fine-tuning**, **unsupervised loss plateau detection**, and **causal-aware gradient adaptation**. This allows the model to autonomously manage concept drift, prevent catastrophic forgetting, and enable backward knowledge transfer without relying on explicit task boundaries. yes
 
 ## Hyperparameters
 
