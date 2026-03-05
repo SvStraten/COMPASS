@@ -27,7 +27,12 @@ pip install -r requirements.txt
 ## 📊 Data Preparation
 Place your raw event logs (in `.csv` format) inside the `Data/` directory. The framework automatically handles preprocessing, time-formatting, and sequence extraction via `Utils/preprocess.py`.
 
-*Note: Preprocessed objects are automatically cached as `.pkl` files in the `Preprocessed/` directory to dramatically speed up subsequent runs.*
+*Note: Preprocessed objects are automatically cached as `.pkl` files in the `Preprocessed/` directory to speed up subsequent runs.*
+
+## 🚀 How to Run?
+```bash
+python Methods/CONAP_FM/run.py --dataset Data/RequestForPayment.csv
+```
 
 ## Hyperparameters
 
