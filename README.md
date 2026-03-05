@@ -17,6 +17,9 @@ CONAP-FM/
 └── README.md               # This file
 ```
 
+git clone [https://github.com/SvStraten/CONAP-FM.git](https://github.com/SvStraten/CONAP-FM.git)
+cd CONAP-FM
+
 ## Hyperparameters
 
 ### Hyperparameter Search Space
