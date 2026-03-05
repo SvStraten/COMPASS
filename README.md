@@ -17,9 +17,12 @@ CONAP-FM/
 └── README.md               # This file
 ```
 
-git clone [https://github.com/SvStraten/CONAP-FM.git](https://github.com/SvStraten/CONAP-FM.git)
-cd CONAP-FM
-
+## ⚙️ Installation
+```bash
+python -m venv venv
+source venv/bin/activate 
+pip install -r requirements.txt
+```
 ## Hyperparameters
 
 ### Hyperparameter Search Space
