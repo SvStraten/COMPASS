@@ -2,7 +2,7 @@
 
 **COMPASS** is a framework for online continual next activity prediction using Foundation Models (FMs). It addresses the cold-start problem and catastrophic forgetting that affect existing Predictive Process Monitoring (PPM) approaches by combining parameter-efficient fine-tuning with unsupervised drift detection and gradient-based knowledge consolidation — without requiring explicit task boundaries.
 
-[Architecture](architecture.pdf)
+[Architecture](architecture.png)
 
 ---
 
