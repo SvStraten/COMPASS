@@ -98,3 +98,7 @@ All runs use *W* = 100, energy thresholds *ϵ*ᵥᵥ = 0.75, *ϵ*_f = 0.95, and 
 ---
 
 ## 📊 Results
+
+### Runtime
+
+![Runtime](runtimes.png)
