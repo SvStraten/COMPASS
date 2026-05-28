@@ -2,20 +2,6 @@
 
 **COMPASS** is a framework for online continual next activity prediction using Foundation Models (FMs). It addresses the cold-start problem and catastrophic forgetting that affect existing Predictive Process Monitoring (PPM) approaches by combining parameter-efficient fine-tuning with unsupervised drift detection and gradient-based knowledge consolidation — without requiring explicit task boundaries.
 
-> **Paper:** *Online Continual Fine-Tuning of Foundation Models for Process Prediction* — submitted to ECML-PKDD 2025 Workshop on Scalable Continual Learning.
-
----
-
-## ✨ Key Features
-
-- **Foundation Model backbone** — adapts pre-trained LLMs (Tiny-LLM, DistilGPT2) to process event streams via LoRA, eliminating the cold-start problem inherent to scratch-trained models.
-- **Unsupervised drift detection** — monitors rolling loss variance to autonomously detect task boundaries without ground-truth labels (task-free setting).
-- **Adaptive subspace expansion** — at each detected boundary, COMPASS extracts the dominant feature directions of the new task and projects gradient updates to be orthogonal to all prior knowledge, preventing catastrophic forgetting.
-- **Backward knowledge transfer** — previously learned process knowledge is preserved and reused via a unified, growing subspace *M'ₜ = [Wₚ, Mₜ]* that spans all observed tasks.
-- **Test-then-train protocol** — predictions are made before each weight update, ensuring no data leakage.
-
----
-
 ## 📁 Repository Structure
 
 ```text
@@ -61,7 +47,7 @@ Datasets used in the paper:
 | BPI15-REC | Real-world (BPIC 2015) | Recurrent |
 | BPI20-RFP, BPI20-DD, BPI20-ID | Real-world (BPIC 2020) | Natural |
 
-All datasets are publicly available at [data.4tu.nl](https://data.4tu.nl).
+Datasets are publicly available at [data.4tu.nl](https://data.4tu.nl).
 
 ---
 
