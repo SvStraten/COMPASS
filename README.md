@@ -2,8 +2,6 @@
 
 **COMPASS** is a framework for online continual next activity prediction using Foundation Models (FMs). It addresses the cold-start problem and catastrophic forgetting that affect existing Predictive Process Monitoring (PPM) approaches by combining parameter-efficient fine-tuning with unsupervised drift detection and gradient-based knowledge consolidation — without requiring explicit task boundaries.
 
-> **Paper:** *Online Continual Fine-Tuning of Foundation Models for Process Prediction* — submitted to ECML-PKDD 2025 Workshop on Scalable Continual Learning.
-
 ---
 
 ## 📁 Repository Structure
@@ -98,6 +96,14 @@ All runs use *W* = 100, energy thresholds *ϵ*ᵥᵥ = 0.75, *ϵ*_f = 0.95, and 
 ---
 
 ## 📊 Results
+
+### Macro F1-Score
+
+![Macro F1](macro_f1.png)
+
+### Weighted F1-Score
+
+![Weighted F1](weighted_f1.png)
 
 ### Runtime
 
