@@ -17,13 +17,7 @@ sys.path.append(root_dir)
 from Utils.preprocess import preprocess
 from Utils.metrics import save_granular_accuracy
 from Methods.COMPASS.engine import COMPASSEngine
-
-try:
-    from Methods.COMPASS.keeplora_handler import KeepLoRAHandler
-except ImportError:
-    print("CRITICAL: 'keeplora_handler.py' is missing in COMPASS folder.")
-    sys.exit(1)
-
+from Methods.COMPASS.keeplora_handler import KeepLoRAHandler
 torch.cuda.empty_cache()
 
 MODEL_CONFIGS = {
@@ -163,10 +157,6 @@ def run(
     hidden_size    = model_spec.get("hidden_size", None)
     fan_in_fan_out = model_spec.get("fan_in_fan_out", False)
 
-    print(f"\n{data_name} | Seed={seed} | Buffer={hard_buffer_size}")
-    print(f"KeepLoRA: energy_wp={energy_wp} | energy_ft={energy_ft} | max_rank={max_subspace_rank}")
-    print(f"Loading: {model_name}")
-
     config = AutoConfig.from_pretrained(model_name)
     if not hasattr(config, "pad_token_id") or config.pad_token_id is None:
         config.pad_token_id = config.eos_token_id
@@ -212,7 +202,7 @@ def run(
         verbose=verbose,
         plot_dir=plots_dir,
         data_name=data_name,
-        model_name=model_name,                          # NEW: passed through for filename
+        model_name=model_name,                         
         input_dtype=input_dtype,
         hard_buffer_size=hard_buffer_size,
         loss_window_length=loss_window_length,
@@ -234,7 +224,6 @@ def run(
             pred_labels=results["prediction_results"]["prediction_labels"],
         )
 
-    # Derive human-readable method tag
     if not use_svd:
         method_tag = "NoUpdate"
     elif not use_Wp and not use_Mt:
@@ -244,7 +233,6 @@ def run(
     else:
         method_tag = "COMPASS_taskaware" if use_oracle_drift else "COMPASS_taskfree"
 
-    # Write per-window accuracy to shared granular_accuracy.csv
     window_accs = results.get("window_accuracies", [])
     if window_accs:
         midpoints     = [i * window_size + window_size // 2 for i in range(len(window_accs))]
@@ -337,12 +325,9 @@ def parse_args():
     p.add_argument("--data-split",               choices=["full", "validation", "evaluation"], default="full")
     p.add_argument("--no-backward-transfer",     action="store_true")
     p.add_argument("--oracle-drift",             action="store_true")
-    p.add_argument("--no-Wp",                    action="store_true",
-                   help="Ablation: disable pre-trained subspace constraint (Wp)")
-    p.add_argument("--no-Mt",                    action="store_true",
-                   help="Ablation: disable task-direction accumulation (Mt)")
-    p.add_argument("--no-reinit",                action="store_true",
-                   help="Ablation: disable gradient-based LoRA-A reinitialization")
+    p.add_argument("--no-Wp",                    action="store_true")
+    p.add_argument("--no-Mt",                    action="store_true")
+    p.add_argument("--no-reinit",                action="store_true")
     return p.parse_args()
 
 

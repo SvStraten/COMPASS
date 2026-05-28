@@ -87,7 +87,6 @@ class COMPASSEngine:
         self.use_oracle_drift = use_oracle_drift
         self.save_per_event = save_per_event
 
-        # Build short tags for the output filename
         self.model_tag = (model_name or "unknown").split("/")[-1]
         self.protocol  = "oracle" if use_oracle_drift else "taskfree"
 
@@ -171,8 +170,6 @@ class COMPASSEngine:
         return elapsed
 
     def _check_and_handle_plateau(self, loss, x_win, y_win):
-        """Returns (elapsed_consolidation_time, loss_variance).
-        loss_variance is nan when the plateau buffer is not yet full."""
         if self.use_oracle_drift or not self.use_svd:
             return 0.0, float("nan")
         self.plateau_buffer.append(loss)
@@ -229,7 +226,7 @@ class COMPASSEngine:
             y_win = label_stream[s_win:e_win]
             win_size = len(y_win)
 
-            # Oracle drift check — consolidate before inference on this window
+            # Oracle drift check 
             consolidation_time_s = 0.0
             triggered_consolidation = False
             if self.use_oracle_drift and self.use_svd:
@@ -347,7 +344,6 @@ class COMPASSEngine:
 
             global_idx += win_size
 
-        # Write per-event CSV
         if self.save_per_event and per_event_records:
             os.makedirs(self.plot_dir, exist_ok=True)
             fname = f"COMPASS_{self.data_name}_{self.model_tag}_{self.protocol}_per_event.csv"
@@ -358,7 +354,6 @@ class COMPASSEngine:
                 writer.writerows(per_event_records)
             print(f"[COMPASS] Per-event CSV → {path}")
 
-        # Write per-window drift CSV — filename encodes W and tau
         if window_records:
             os.makedirs(self.plot_dir, exist_ok=True)
             tau_str  = f"{self.loss_variance_threshold:.0e}"
