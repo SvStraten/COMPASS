@@ -45,7 +45,7 @@ Place raw event logs (`.csv` format) in the `Data/` directory. Preprocessing, ti
 
 ---
 
-## 🚀 How to Run
+## How to Run?
 
 ### Basic run (task-free, Tiny-LLM)
 
@@ -75,7 +75,7 @@ sbatch run_benchmark.sh COMPASS Data/ORI5000.csv
 
 ---
 
-## 📐 Hyperparameters
+## Hyperparameters
 
 Hyperparameters were tuned on the first 15% of each event log (validation split). The remaining 85% is used for online evaluation.
 
