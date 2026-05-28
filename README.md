@@ -89,19 +89,9 @@ Hyperparameters were tuned on the first 15% of each event log (validation split)
 | LoRA rank (*r*) | {8, 64, 256, 512} |
 | LoRA alpha (*α*) | {16, 128, 512, 1024} |
 
-### Optimal COMPASS hyperparameters per dataset
+### Optimal hyperparameters for each method per dataset 
 
-| Dataset | *η* | *τ* | *r* | *α* |
-|---|---|---|---|---|
-| IRO5000 | 2e-3 | 5e-4 | 256 | 512 |
-| ORI5000 | 2e-4 | 5e-2 | 256 | 512 |
-| ROI5000 | 2e-3 | 5e-4 | 256 | 512 |
-| OIR5000 | 2e-4 | 5e-4 | 256 | 512 |
-| RIO5000 | 2e-3 | 5e-2 | 256 | 512 |
-| BPI15-REC | 2e-4 | 5e-4 | 256 | 512 |
-| BPI20-RFP | 2e-4 | 5e-4 | 256 | 512 |
-| BPI20-DD | 2e-4 | 5e-4 | 256 | 512 |
-| BPI20-ID | 2e-4 | 5e-3 | 256 | 512 |
+![Optimal Hyperparameters](hyperparameters.png)
 
 All runs use *W* = 100, energy thresholds *ϵ*ᵥᵥ = 0.75, *ϵ*_f = 0.95, and max subspace rank = 64.
 
