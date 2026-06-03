@@ -1,12 +1,15 @@
 # COMPASS: Continual Online Foundation Model-based Process Prediction with Adaptive SubSpaces
 
+## WARNING
+<span style="color:red">⚠️ Note: If code files do not appear to load on Anonymous GitHub, please download the repository manually. This is a known bug with Anonymous GitHub [(link to issue)](https://github.com/tdurieux/anonymous_github/issues/429) — all files are present and will display correctly once downloaded locally.</span>
+
 **COMPASS** is a framework for online continual next activity prediction using Foundation Models (FMs). It addresses the cold-start problem and catastrophic forgetting that affect existing Predictive Process Monitoring (PPM) approaches by combining parameter-efficient fine-tuning with unsupervised drift detection and gradient-based knowledge consolidation — without requiring explicit task boundaries.
 
 ![Architecture](architecture.png)
 
 ---
 
-## 📁 Repository Structure
+## Repository Structure
 
 ```text
 COMPASS/
@@ -14,7 +17,7 @@ COMPASS/
 ├── Data/                        # Raw event logs (.csv)
 ├── Methods/
 │   └── COMPASS/
-│       ├── run.py               # Entry point — CLI and experiment orchestration
+│       ├── run.py               
 │       ├── engine.py            # Streaming loop, drift detection, training
 │       └── keeplora_handler.py  # Subspace management and LoRA reinitialization
 ├── Utils/
@@ -27,7 +30,7 @@ COMPASS/
 
 ---
 
-## ⚙️ Installation
+## Installation
 
 ```bash
 python -m venv venv
@@ -39,7 +42,7 @@ Requires Python ≥ 3.10 and a CUDA-capable GPU. Experiments were run on NVIDIA 
 
 ---
 
-## 📊 Data Preparation
+## Data Preparation
 
 Place raw event logs (`.csv` format) in the `Data/` directory. Preprocessing, timestamp formatting, and prefix sequence extraction are handled automatically by `Utils/preprocess.py`. Preprocessed objects are cached as `.pkl` files under `Preprocessed/` to speed up repeated runs.
 
@@ -66,13 +69,6 @@ python -m Methods.COMPASS.run \
     --oracle-drift \
     --seed 42
 ```
-
-### Reproduce benchmark results (SLURM)
-
-```bash
-sbatch run_benchmark.sh COMPASS Data/ORI5000.csv
-```
-
 ---
 
 ## Hyperparameters
