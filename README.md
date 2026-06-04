@@ -1,4 +1,4 @@
-# COMPASS: Continual Online Foundation Model-based Process Prediction with Adaptive SubSpaces
+# COMPASS: Continual Online Foundation Model-based PPM with Adaptive SubSpaces
 
 ## WARNING
 <span style="color:red">⚠️ Note: If code files do not appear to load on Anonymous GitHub, please download the repository manually. This is a known bug with Anonymous GitHub [(link to issue)](https://github.com/tdurieux/anonymous_github/issues/429) — all files are present and will display correctly once downloaded locally.</span>
