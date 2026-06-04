@@ -89,11 +89,11 @@ Hyperparameters were tuned on the first 15% of each event log (validation split)
 
 ![Optimal Hyperparameters](hyperparameters.png)
 
-All runs use *W* = 100, energy thresholds *ϵ*ᵥᵥ = 0.75, *ϵ*_f = 0.95, and max subspace rank = 64.
+All runs use *W* = 100, energy thresholds *ϵ*ᵥᵥ = 0.75, *ϵ*_f = 0.95, and max subspace rank R = 64.
 
 ---
 
-## 📊 Results
+## Results
 
 ### Macro F1-Score
 
