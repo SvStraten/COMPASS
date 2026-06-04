@@ -22,7 +22,6 @@ def preprocess(file: str, save_dir: str = "Preprocessed"):
     
     save_path = os.path.join(save_dir, f"{dataName}_preprocessed.pkl")
 
-    # 1. Load cache if it exists
     if os.path.exists(save_path):
         print(f"Loading cached preprocessing for {dataName} from {save_path}")
         with open(save_path, "rb") as f:
@@ -33,9 +32,6 @@ def preprocess(file: str, save_dir: str = "Preprocessed"):
             return objs["dataName"], ds
         else:
             print("Cache found but missing 'case_ids'. Re-running preprocessing...")
-
-    # 2. Fresh preprocess
-    print(f"\n--- START PREPROCESSING: {dataName} ---")
     
     if Data is None:
         raise ImportError("The 'Data' or 'Setup' modules are missing from the root directory.")
@@ -64,17 +60,12 @@ def preprocess(file: str, save_dir: str = "Preprocessed"):
     d.logfile.keep_attributes(["event", "completeTime"])
     
     if STANDARD:
-        print(f"Applying STANDARD settings (Split={STANDARD.train_percentage})...")
         d.prepare(STANDARD)
-    
-    print("### Data Prepared")
     
     if hasattr(d, 'test_logfile') and d.test_logfile is not None:
         target_logfile = d.test_logfile
-        print(f"DEBUG: Using TEST LogFile. Rows: {len(target_logfile.data)}")
     else:
         target_logfile = d.logfile
-        print(f"DEBUG: Using FULL LogFile. Rows: {len(target_logfile.data)}")
 
     df = target_logfile.get_data().copy()
     
@@ -88,14 +79,12 @@ def preprocess(file: str, save_dir: str = "Preprocessed"):
     ):
         try:
             parsed = pd.to_datetime(df["completeTime"], format=fmt, exact=True)
-            print("Detected time format:", fmt)
             break
         except Exception:
             parsed = None
     
     if parsed is None:
         parsed = pd.to_datetime(df["completeTime"], errors="coerce")
-        print("Time format: auto-inferred (coerce).")
     df["completeTime"] = parsed
 
     if target_logfile.contextdata is None:
@@ -103,7 +92,6 @@ def preprocess(file: str, save_dir: str = "Preprocessed"):
     else:
         target_logfile.contextdata = df
 
-    print("Initializing Sampler...")
     data_sampler = Sampler(data=d)
 
     trace_col_name = "case"
@@ -112,9 +100,7 @@ def preprocess(file: str, save_dir: str = "Preprocessed"):
     
     try:
         raw_case_ids = df[trace_col_name].values
-        print(f"DEBUG: Extracted {len(raw_case_ids)} raw case IDs from column '{trace_col_name}'.")
     except KeyError:
-        print(f"WARNING: Column '{trace_col_name}' not found. Using first column.")
         raw_case_ids = df.iloc[:, 0].values
 
     sampler_len = 0
@@ -126,23 +112,16 @@ def preprocess(file: str, save_dir: str = "Preprocessed"):
     else:
         sampler_len = len(data_sampler.test_inputs)
 
-    print(f"DEBUG: Sampler contains {sampler_len} sequences.")
-
     if len(raw_case_ids) > sampler_len:
         diff = len(raw_case_ids) - sampler_len
-        print(f"[ALIGNMENT] Mismatch detected: Raw Log={len(raw_case_ids)}, Sampler={sampler_len}")
-        print(f"[ALIGNMENT] Trimming {diff} rows from the BEGINNING of Case IDs.")
         data_sampler.case_ids = raw_case_ids[-sampler_len:]
     elif len(raw_case_ids) < sampler_len:
-        print(f"CRITICAL WARNING: Sampler has MORE data ({sampler_len}) than Raw Log ({len(raw_case_ids)}).")
         data_sampler.case_ids = raw_case_ids
     else:
-        print(f"[ALIGNMENT] Perfect match ({sampler_len} rows).")
         data_sampler.case_ids = raw_case_ids
 
     with open(save_path, "wb") as f:
         pickle.dump({"dataName": dataName, "data_sampler": data_sampler}, f)
         
     print(f"Preprocessed objects saved to {save_path}")
-    print("--- PREPROCESSING COMPLETE ---\n")
     return dataName, data_sampler

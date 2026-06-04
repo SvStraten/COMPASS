@@ -35,10 +35,9 @@ class KeepLoRAHandler:
         for name, module in model.named_modules():
             if not (hasattr(module, "lora_A") and hasattr(module, "base_layer")):
                 continue
-            W = module.base_layer.weight.data.float()  # (d_out, d_in)
+            W = module.base_layer.weight.data.float()
             try:
                 _, S, Vh = torch.linalg.svd(W, full_matrices=False)
-                # Vh: (k, d_in)  →  Vh.T columns are right singular vectors
                 energy = torch.cumsum(S ** 2, dim=0) / (S ** 2).sum()
                 k_idx = (energy >= self.energy_wp).nonzero(as_tuple=True)[0]
                 p = int(k_idx[0].item()) + 1 if len(k_idx) > 0 else len(S)
@@ -47,7 +46,7 @@ class KeepLoRAHandler:
                 self.principal_subspace[name] = Vh[:p, :].T.to(self.device)
                 count += 1
             except Exception as e:
-                print(f"  [COMPASS] Wp SVD failed for {name}: {e}")
+                print(f"Wp SVD failed for {name}: {e}")
 
     def consolidate_task(
         self,
@@ -89,8 +88,8 @@ class KeepLoRAHandler:
             X_flat = X.reshape(-1, X.shape[-1]).to(self.device)
             d_in = X_flat.shape[1]
 
-            Wp = self.principal_subspace.get(name)      # (d_in, p)
-            Mt_prev = self.task_directions.get(name)    # (d_in, k)
+            Wp = self.principal_subspace.get(name)      
+            Mt_prev = self.task_directions.get(name)    
             X_hat = X_flat
             if self.use_Wp and Wp is not None and Wp.shape[0] == d_in:
                 Wp_d = Wp.to(X_flat.device)
@@ -105,7 +104,7 @@ class KeepLoRAHandler:
                 k_idx = (energy >= self.energy_ft).nonzero(as_tuple=True)[0]
                 m = int(k_idx[0].item()) + 1 if len(k_idx) > 0 else min(8, len(S_x))
                 m = min(m, self.max_subspace_rank)
-                new_dirs = Vh_x[:m, :].T  # (d_in, m)
+                new_dirs = Vh_x[:m, :].T 
 
                 if name not in self.task_directions:
                     self.task_directions[name] = new_dirs
@@ -122,7 +121,7 @@ class KeepLoRAHandler:
 
                 updated += 1
             except Exception as e:
-                print(f"  [COMPASS] Mt update failed for {name}: {e}")
+                print(f"Mt update failed for {name}: {e}")
 
     def _reinitialize_lora_A(
         self,
@@ -151,11 +150,11 @@ class KeepLoRAHandler:
             if lora_a is None or module.base_layer.weight.grad is None:
                 continue
 
-            G = module.base_layer.weight.grad.float()   # (d_out, d_in)
+            G = module.base_layer.weight.grad.float()   
             d_in = G.shape[1]
 
-            Wp = self.principal_subspace.get(name)      # (d_in, p)
-            Mt = self.task_directions.get(name)         # (d_in, k)
+            Wp = self.principal_subspace.get(name)      
+            Mt = self.task_directions.get(name)        
 
             G_hat = G
             if self.use_Wp and Wp is not None and Wp.shape[0] == d_in:
@@ -177,7 +176,7 @@ class KeepLoRAHandler:
                     lora_b.weight.requires_grad_(True)
                 reinit_count += 1
             except Exception as e:
-                print(f"  [COMPASS] A reinit failed for {name}: {e}")
+                print(f"A reinit failed for {name}: {e}")
 
         model.zero_grad()
 
@@ -194,7 +193,7 @@ class KeepLoRAHandler:
                     with torch.no_grad():
                         lora_b.weight.data.zero_()
                 count += 1
-        print(f"  Reset B to zero for {count} layers (A kept, no gradient reinit).")
+        print(f"Reset B to zero for {count} layers (A kept, no gradient reinit).")
 
     def ensure_only_B_trainable(self, model: nn.Module) -> None:
         for module in model.modules():

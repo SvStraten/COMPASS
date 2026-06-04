@@ -98,7 +98,7 @@ class COMPASSEngine:
                     self.oracle_drift_indices = sorted(self.DRIFT_DATA[key])
                     break
             if self.verbose:
-                print(f"[COMPASS] Oracle: {len(self.oracle_drift_indices)} drift points for {clean_name}")
+                print(f"Oracle: {len(self.oracle_drift_indices)} drift points for {clean_name}")
 
         self.criterion = nn.CrossEntropyLoss(reduction="sum")
         self.plateau_maxlen = loss_window_length
@@ -114,7 +114,7 @@ class COMPASSEngine:
 
         if self.verbose:
             n_trainable = sum(p.numel() for p in self.model.parameters() if p.requires_grad)
-            print(f"[COMPASS] Trainable params: {n_trainable:,} | use_svd={use_svd} | oracle={use_oracle_drift}")
+            print(f"Trainable params: {n_trainable:,} | use_svd={use_svd} | oracle={use_oracle_drift}")
 
     def _rebuild_optimizer(self, lr=None):
         lr = lr or self.learning_rate
@@ -157,7 +157,7 @@ class COMPASSEngine:
         if not self.use_svd:
             return 0.0
         self.plateau_triggers += 1
-        print(f"\n[COMPASS] {reason} — consolidating task #{self.plateau_triggers}")
+        print(f"\n{reason} — consolidating task #{self.plateau_triggers}")
         t0 = time.perf_counter()
         self.keeplora_handler.consolidate_task(
             model=self.model,
@@ -197,7 +197,7 @@ class COMPASSEngine:
         self.model.train()
         per_event_records = []
         window_records = []
-        print("[COMPASS] Starting stream...")
+        print("Starting stream...")
 
         # Flatten stream
         if isinstance(data.test_inputs, dict):
@@ -226,7 +226,6 @@ class COMPASSEngine:
             y_win = label_stream[s_win:e_win]
             win_size = len(y_win)
 
-            # Oracle drift check 
             consolidation_time_s = 0.0
             triggered_consolidation = False
             if self.use_oracle_drift and self.use_svd:
@@ -238,8 +237,8 @@ class COMPASSEngine:
                         )
                         triggered_consolidation = True
                         break
-
-            # Inference
+               
+            #inference
             self.model.eval()
             t0 = time.perf_counter()
             with torch.no_grad():
@@ -256,7 +255,7 @@ class COMPASSEngine:
             gpu_mem = _gpu_mem_mb()
             cpu_mem = _cpu_ram_mb()
 
-            # Train
+            #training
             self.model.train()
             self._update_hard_buffer(x_win, y_win)
             cur_n = len(y_win)
@@ -292,7 +291,7 @@ class COMPASSEngine:
             train_time_per_event = (time.perf_counter() - t0) / win_size
             avg_loss = accumulated_loss / self.gradient_steps
 
-            # Plateau-based consolidation (only when not using oracle)
+            #consolidation
             plateau_time, loss_variance = self._check_and_handle_plateau(avg_loss, x_win, y_win)
             if plateau_time > 0.0:
                 consolidation_time_s += plateau_time
@@ -302,9 +301,8 @@ class COMPASSEngine:
             cumulative_acc = total_correct / total_seen
 
             if self.verbose:
-                print(f"  [COMPASS] Window {i+1}/{n_full} | Loss: {avg_loss:.4f} | Acc: {test_acc:.4f}")
-
-            # Per-event records
+                print(f"Window {i+1}/{n_full} | Loss: {avg_loss:.4f} | Acc: {test_acc:.4f}")
+                
             if self.save_per_event:
                 for j in range(win_size):
                     p = probs[j]
@@ -331,7 +329,6 @@ class COMPASSEngine:
                         "consolidation_count":     self.plateau_triggers,
                     })
 
-            # Per-window drift record
             window_records.append({
                 "window_idx":          i,
                 "window_start_event":  s_win,
@@ -366,12 +363,11 @@ class COMPASSEngine:
                 writer = csv.DictWriter(f, fieldnames=list(window_records[0].keys()))
                 writer.writeheader()
                 writer.writerows(window_records)
-            print(f"[COMPASS] Per-window drift CSV → {path_w}")
 
         total_acc   = total_correct / total_seen if total_seen > 0 else 0.0
         macro_f1    = f1_score(all_true, all_preds, average="macro",    zero_division=0)
         weighted_f1 = f1_score(all_true, all_preds, average="weighted", zero_division=0)
-        print(f"\n[COMPASS] Done. Acc: {total_acc:.4f} | Macro-F1: {macro_f1:.4f} | Weighted-F1: {weighted_f1:.4f} | Consolidations: {self.plateau_triggers}")
+        print(f"\nAcc: {total_acc:.4f} | Macro-F1: {macro_f1:.4f} | Weighted-F1: {weighted_f1:.4f} | Consolidations: {self.plateau_triggers}")
 
         return {
             "prediction_results": {"actual_labels": all_true, "prediction_labels": all_preds},
