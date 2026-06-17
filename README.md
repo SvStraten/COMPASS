@@ -79,7 +79,7 @@ Hyperparameters were tuned on the first 15% of each event log (validation split)
 
 | Parameter | Values |
 |---|---|
-| Window size (*W*, reffered to as U+0393 in the paper) | {100, 500, 1000} |
+| Window size (*W*, reffered to as Γ in the paper) | {100, 500, 1000} |
 | Learning rate (*η*) | {2e-3, 2e-4, 2e-5} |
 | Variance threshold (*τ*) | {5e-2, 5e-3, 5e-4} |
 | LoRA rank (*r*) | {8, 64, 256, 512} |
@@ -89,7 +89,7 @@ Hyperparameters were tuned on the first 15% of each event log (validation split)
 
 ![Optimal Hyperparameters](hyperparameters.png)
 
-All runs use *U+0393* = 100, energy thresholds *ϵ*ᵥᵥ = 0.75, *ϵ*_f = 0.95, and max subspace rank R = 64.
+All runs use *Γ* = 100, energy thresholds *ϵ*ᵥᵥ = 0.75, *ϵ*_f = 0.95, and max subspace rank R = 64.
 
 ---
 
